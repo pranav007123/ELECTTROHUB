@@ -1,0 +1,56 @@
+<?php
+include('staffHeader.php');
+$uid = $_SESSION['uid'];
+?>
+
+<section class="w3l-hotair-form my-tab-div-x">
+    <h1>History</h1>
+    <div class="view-content">
+
+        <?php
+        $qry = "SELECT ub.*, u.*, st.`st_name` FROM `user_bookings` ub, `station` st, `user_reg` u, `staff` stf  WHERE ub.`u_id` = u.`u_id` AND ub.`st_id` = st.`st_id` AND ub.`stf_id` = stf.`stf_id` AND ub.`st_id` = stf.`st_id` AND ub.`status` = 'FULLY CHARGED' AND ub.`stf_id` = '$uid'";
+        // $time = "SELECT "
+        $result = mysqli_query($conn, $qry);
+        if ($result->num_rows > 0) {
+        ?>
+            <table width="60%">
+                <tr>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Station</th>
+                    <th>Completed On</th>
+                    <th>Status</th>
+
+                </tr>
+            <?php
+            while ($row = mysqli_fetch_array($result)) {
+                echo "
+                                <tr>
+                                    <td>" . $row['u_name'] . "</td>
+                                    <td>" . $row['u_phone'] . "</td>
+                                    <td>" . $row['u_email'] . "</td>
+                                    <td>" . $row['st_name'] . "</td>
+                                    <td>" . $row['date'] . "</td>
+                                    <td>" . $row['status'] . "</td>
+                                   
+                                </tr>";
+            }
+        } else {
+            echo "<div class='no-data-div'><img src='../images/no_data.png'><p>No Data</p></div>";
+        }
+
+            ?>
+            </table>
+
+
+
+    </div>
+</section>
+
+
+<?php
+
+include('../footer.php');
+
+?>
